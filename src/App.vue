@@ -2,6 +2,7 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import { remult } from "remult";
 import { Task } from "./shared/Task";
+import { TasksController } from "./shared/TasksController";
 
 const taskRepo = remult.repo(Task);
 const tasks = ref<Task[]>([]);
@@ -44,6 +45,10 @@ function doFetchData() {
     .then((items) => (tasks.value = items));
 }
 
+async function setAllCompleted(completed: boolean) {
+  await TasksController.setAllCompleted(completed)
+}
+
 onMounted(() => {
   // doFetchData();
   onUnmounted(
@@ -73,6 +78,12 @@ onMounted(() => {
         <button @click="saveTask(task)" >Save</button>        
         <button @click="deleteTask(task)">Delete</button>
       </div>    
+
+      <div class="">
+        <button @click="setAllCompleted(true)">Set All as Completed</button>
+        <button @click="setAllCompleted(false)"> Set All as Uncompleted</button>
+      </div>
+
     </main>
   </div>
 </template>
